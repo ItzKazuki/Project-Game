@@ -6,19 +6,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelompok 1 - Games</title>
   <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    html {
+      scrollbar-width: none;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    .element::-webkit-scrollbar {
+      width: 0 !important
+    }
+
+    @keyframes move-cloud-left {
+      from {
+        transform: translate(100%, -100%);
+        /* Mulai di luar layar sebelah kanan */
+      }
+
+      to {
+        transform: translate(-100%, 100%);
+        /* Berakhir di luar layar sebelah kiri */
+      }
+    }
+
+    @keyframes object-move-up {
+      from {
+        transform: translateY(100%);
+        /* Mulai di luar layar sebelah kanan */
+      }
+
+      to {
+        transform: translateY(-100%);
+        /* Berakhir di luar layar sebelah kiri */
+      }
+    }
+
+    .cloud-left {
+      position: absolute;
+      top: 0%;
+      left: 0;
+      width: 100%;
+      /* 50% dari lebar layar */
+      /* max-width: 2000px; */
+      /* Maksimal lebar */
+      height: auto;
+      /* opacity: 0.8; */
+      z-index: 100;
+      animation: move-cloud-left 35s linear infinite;
+      /* Durasi 20 detik, berulang */
+    }
+
+    .austronot {
+      position: absolute;
+      top: 0%;
+      left: 0;
+      width: 100%;
+      /* 50% dari lebar layar */
+      /* max-width: 2000px; */
+      /* Maksimal lebar */
+      height: auto;
+      /* opacity: 0.8; */
+      z-index: 110;
+      animation: object-move-up 35s linear infinite;
+    }
+  </style>
 </head>
 
 <body>
+  <img src="./assets/meteor.png" alt="Cloud Left" class="cloud-left">
+  <img src="./assets/austronot.png" alt="Cloud Left" width="50px" class="austronot">
   <div class="background-container">
     <div class="title">
       <img src="assets/welcome-text.png" alt="">
       <h1>Player!</h1>
     </div>
     <div class="games">
-      <img src="assets/example-1.png" alt="">
-      <img src="assets/example-1.png" alt="">
-      <img src="assets/example-1.png" alt="">
-      
+      <a href="spacegame/">
+        <img src="assets/example-1.png" alt="">
+      </a>
+      <a href="flappy-bird/">
+        <img src="assets/example-1.png" alt="">
+      </a>
+      <a href="snake-game/">
+        <img src="assets/example-1.png" alt="">
+      </a>
+
     </div>
   </div>
 </body>
