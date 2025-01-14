@@ -27,6 +27,15 @@ body {
   gap: 10px;
 }
 
+.background-container .cloud {
+  position: absolute; /* Position it within the container */
+  bottom: 0; /* Place it at the bottom */
+  right: 0; /* Place it at the right (adjust as needed) */
+  /* Add more styles for size, opacity, etc., as needed. */
+  z-index: 180;
+}
+
+
 .title {
   /* width: 400px; */
   display: flex;
@@ -44,7 +53,7 @@ body {
   align-items: center;
   gap: 25px;
   margin: 0 300px;
-  z-index: 200;
+  z-index: 400;
 }
 
 .games img {

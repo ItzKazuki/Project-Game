@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelompok 1 - Games</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/minecraft-css-framework-v-1.0.0.css">
 
   <style>
     html {
@@ -33,6 +34,16 @@
       }
     }
 
+    @keyframes earth-move-right {
+      from {
+        transform: translateX(100%);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
     @keyframes object-move-up {
       from {
         transform: translateY(100%);
@@ -56,7 +67,7 @@
       height: auto;
       /* opacity: 0.8; */
       z-index: 100;
-      animation: move-cloud-left 35s linear infinite;
+      animation: move-cloud-left 25s linear infinite;
       /* Durasi 20 detik, berulang */
     }
 
@@ -70,8 +81,22 @@
       /* Maksimal lebar */
       height: auto;
       /* opacity: 0.8; */
+      z-index: 115;
+      animation: object-move-up 45s linear infinite;
+    }
+
+    .earth {
+      position: absolute;
+      top: 0%;
+      left: 0;
+      width: 100%;
+      /* 50% dari lebar layar */
+      /* max-width: 2000px; */
+      /* Maksimal lebar */
+      height: auto;
+      /* opacity: 0.8; */
       z-index: 110;
-      animation: object-move-up 35s linear infinite;
+      animation: earth-move-right 85s linear infinite;
     }
   </style>
 </head>
@@ -79,22 +104,36 @@
 <body>
   <img src="./assets/meteor.png" alt="Cloud Left" class="cloud-left">
   <img src="./assets/austronot.png" alt="Cloud Left" width="50px" class="austronot">
+  <img src="./assets/earth.png" alt="Cloud Left" width="50px" class="earth">
   <div class="background-container">
     <div class="title">
       <img src="assets/welcome-text.png" alt="">
-      <h1>Player!</h1>
+      <h1 id="player">Player!</h1>
     </div>
     <div class="games">
       <a href="spacegame/">
         <img src="assets/example-1.png" alt="">
       </a>
       <a href="flappy-bird/">
-        <img src="assets/example-1.png" alt="">
-      </a>
-      <a href="snake-game/">
-        <img src="assets/example-1.png" alt="">
+        <img src="assets/example-2.png" alt="">
       </a>
 
+    </div>
+    <!-- <img src="./assets/cloud.png" alt=""> -->
+    <img src="assets/cloud.png" alt="Cloud" class="cloud">
+  </div>
+
+  <!-- Modal -->
+  <div id="example-modal" class="modal modal-open">
+    <div class="modal-header">Your Nickname</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="form-label">Your Name</label>
+        <input type="text" name="" class="form-input" id="nick">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="button button-primary" onclick="document.getElementById('player').innerHTML = document.getElementById('nick').value; document.getElementById('example-modal').classList.remove('modal-open');">Confirm</button>
     </div>
   </div>
 </body>
