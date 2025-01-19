@@ -159,6 +159,7 @@
         document.getElementById('example-modal').classList.add('modal-open');
         document.body.classList.add('modal-open-prevent-interaction');
       } else {
+        document.body.classList.remove('modal-open-prevent-interaction');
         document.getElementById('player').textContent = getUsername()
     }
   }
