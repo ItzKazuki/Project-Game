@@ -98,10 +98,19 @@
       z-index: 110;
       animation: earth-move-right 85s linear infinite;
     }
+
+    body.modal-open-prevent-interaction {
+      pointer-events: none;
+      /* Prevents interaction with elements below */
+    }
+
+    .modal {
+      pointer-events: auto;
+    }
   </style>
 </head>
 
-<body>
+<body class="modal-open-prevent-interaction">
   <img src="./assets/meteor.png" alt="Cloud Left" class="cloud-left">
   <img src="./assets/austronot.png" alt="Cloud Left" width="50px" class="austronot">
   <img src="./assets/earth.png" alt="Cloud Left" width="50px" class="earth">
@@ -118,13 +127,19 @@
         <img src="assets/example-2.png" alt="">
       </a>
 
+      <a href="snake-game/">
+        <img src="assets/example-1.png" alt="">
+      </a>
+      <a href="TicTacToe/">
+        <img src="assets/example-2.png" alt="">
+      </a>
     </div>
     <!-- <img src="./assets/cloud.png" alt=""> -->
     <img src="assets/cloud.png" alt="Cloud" class="cloud">
   </div>
 
   <!-- Modal -->
-  <div id="example-modal" class="modal modal-open">
+  <div id="example-modal" class="modal">
     <div class="modal-header">Your Nickname</div>
     <div class="modal-body">
       <div class="form-group">
@@ -133,9 +148,36 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="button button-primary" onclick="document.getElementById('player').innerHTML = document.getElementById('nick').value; document.getElementById('example-modal').classList.remove('modal-open');">Confirm</button>
+      <button class="button button-primary"
+        onclick="setUsername(document.getElementById('nick').value); document.getElementById('example-modal').classList.remove('modal-open'); document.body.classList.remove('modal-open-prevent-interaction');">Confirm</button>
     </div>
   </div>
+
+  <script>
+    window.onload = function () {
+      if(localStorage.getItem('username') == null) {
+        document.getElementById('example-modal').classList.add('modal-open');
+        document.body.classList.add('modal-open-prevent-interaction');
+      } else {
+        document.getElementById('player').textContent = getUsername()
+    }
+  }
+
+  document.getElementById('player').addEventListener("click", (e) => {
+    document.getElementById('example-modal').classList.add('modal-open');
+    document.body.classList.add('modal-open-prevent-interaction');
+  })
+
+    function setUsername(username) {
+      localStorage.setItem('username', username);
+
+      document.getElementById('player').textContent = getUsername();
+    }
+
+    function getUsername() {
+      return localStorage.getItem('username') + "!" || 'Player!';
+    }
+  </script>
 </body>
 
 </html>

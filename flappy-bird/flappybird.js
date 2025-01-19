@@ -1,10 +1,8 @@
 //board
 let board;
 let boardWidth = 1280;
-let boardHeight = 640;
+let boardHeight = 620;
 let context;
-let gameState = "not started";
-const startButton = document.getElementById('startButton');
 
 //bird
 let birdWidth = 48; //width/height ratio = 408/228 = 17/12
@@ -31,15 +29,72 @@ let topPipeImg;
 let bottomPipeImg;
 
 //physics
-let velocityX = -2; //pipes moving left speed
+let velocityX = -3; //pipes moving left speed
 let velocityY = 0; //bird jump speed
 let gravity = 0.4;
 
+// my var
+let placePipe = 1700;
+let gapPipe = 2; // makin tinggi makin mengecil
+let scoreElement;
+let topScoreElement;
+
 let gameOver = false;
 let score = 0;
+let highScore = 0;
+
+function levelAnjay() {
+  if (score == 0) {
+    velocityX = -3;
+    placePipe = 1700;
+    gapPipe = 2;
+    return;
+  }
+
+  if (score == 10) {
+    velocityX = -4;
+    // placePipe = placePipe - 500;
+    return;
+  }
+
+  if (score == 20) {
+    velocityX = -4.5;
+    placePipe = 1000;
+    return;
+  }
+
+  if (score == 25) {
+    gapPipe = 3;
+    return;
+  }
+
+  if (score == 30) {
+    velocityX = -5.5;
+    placePipe = 600;
+    gapPipe = 4;
+    return;
+  }
+
+  if (score == 40) {
+    velocityX = -6;
+    placePipe = 30;
+    gapPipe = 4.5;
+    return;
+  }
+
+  if (score >= 50) {
+    velocityX = -7;
+    placePipe = 5;
+    gapPipe = 5;
+    return;
+  }
+}
 
 window.onload = function () {
   board = document.getElementById("board");
+  // my func
+  scoreElement = document.getElementById("score");
+  topScoreElement = document.getElementById("topScore");
   board.height = boardHeight;
   board.width = boardWidth;
   context = board.getContext("2d"); //used for drawing on the board
@@ -62,7 +117,7 @@ window.onload = function () {
   bottomPipeImg.src = "./bottompipe.png";
 
   requestAnimationFrame(update);
-  setInterval(placePipes, 1500); //every 1.5 seconds
+  setInterval(placePipes, placePipe); //every 1.5 seconds
   document.addEventListener("keydown", moveBird);
   document.addEventListener("click", moveBird);
 };
@@ -72,6 +127,7 @@ function update() {
   if (gameOver) {
     return;
   }
+
   context.clearRect(0, 0, board.width, board.height);
 
   //bird
@@ -105,13 +161,20 @@ function update() {
     pipeArray.shift(); //removes first element from the array
   }
 
-  //score
-  context.fillStyle = "white";
-  context.font = "45px sans-serif";
-  context.fillText(score, 5, 45);
+  // //score
+  // context.fillStyle = "white";
+  // context.font = "45px sans-serif";
+  // context.fillText(score, 5, 45);
+
+  scoreElement.innerText = score;
+  topScoreElement.innerText = highScore;
+
+  levelAnjay();
 
   if (gameOver) {
-    context.fillText("GAME OVER", 5, 90);
+    // context.fillText("GAME OVER", 5, 90);
+    highScore = score > highScore ? score : highScore;
+    document.getElementById("example-modal").classList.add("modal-open");
   }
 }
 
@@ -124,7 +187,7 @@ function placePipes() {
   // 0 -> -128 (pipeHeight/4)
   // 1 -> -128 - 256 (pipeHeight/4 - pipeHeight/2) = -3/4 pipeHeight
   let randomPipeY = pipeY - pipeHeight / 4 - Math.random() * (pipeHeight / 2);
-  let openingSpace = board.height / 4;
+  let openingSpace = board.height / gapPipe;
 
   let topPipe = {
     img: topPipeImg,
@@ -159,6 +222,7 @@ function moveBird(e) {
         pipeArray = [];
         score = 0;
         gameOver = false;
+        document.getElementById("example-modal").classList.remove("modal-open");
       }
     }
   }
@@ -173,6 +237,7 @@ function moveBird(e) {
       pipeArray = [];
       score = 0;
       gameOver = false;
+      document.getElementById("example-modal").classList.remove("modal-open");
     }
   }
 }
@@ -182,6 +247,6 @@ function detectCollision(a, b) {
     a.x < b.x + b.width && //a's top left corner doesn't reach b's top right corner
     a.x + a.width > b.x && //a's top right corner passes b's top left corner
     a.y < b.y + b.height && //a's top left corner doesn't reach b's bottom left corner
-    a.y + a.height > b.y
-  ); //a's bottom left corner passes b's top left corner
+    a.y + a.height > b.y //a's bottom left corner passes b's top left corner
+  );
 }

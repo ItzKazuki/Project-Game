@@ -13,7 +13,7 @@ body {
 .background-container {
   background-image: url('../bg.jpg'); /* URL gambar */
   background-size: cover; /* Ukuran gambar */
-  background-repeat: no-repeat; /* Hindari pengulangan gambar */
+  background-repeat: repeat; /* Hindari pengulangan gambar */
   background-position: center; /* Posisikan gambar di tengah */
   height: 100vh; /* Tinggi area sebesar viewport */
   width: 100%; /* Lebar area penuh */

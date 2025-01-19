@@ -1,145 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Space Adventure</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-
-<body>
-  <h1>Space Adventure</h1>
-  <h3>score : <span id="score">0</span></h3>
-  <div id="main">
-    <div id="area">
-      <div id="plane" style="margin-left: 160px; margin-top: 350px"></div>
-      <!-- <div id="meteor" style="margin-top: 625px"></div> -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Adventure</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Space Adventure</h1>
+    <h3>Score: <span id="score">0</span></h3>
+    <h3>Level: <span id="level">1</span></h3>
+    <div id="main">
+      <div id="area">
+        <div id="plane" style="margin-left: 160px; margin-top: 350px"></div>
+        <div id="meteor" style="margin-top: 625px"></div>
+      </div>
     </div>
-  </div>
 
-  <script type="text/javascript">
-    var isMoving = true;
-    let isRunning = true;
-    let meteors = [];
-    let meteorSpeed = 5;  // Initial speed
+    <!-- Modal Game Over -->
+    <div id="gameOverModal" class="modal">
+      <div class="modal-content">
+        <h2>Game Over</h2>
+        <p>Your Score: <span id="finalScore"></span></p>
+        <button id="retry">Retry</button>
+        <button id="exit" class="exit">Exit</button>
+      </div>
+    </div>
 
-    function setBackgroundMoving() {
-      if (isMoving) {
-        const bg = document.getElementById("main");
-        const currentPos = parseInt(getComputedStyle(bg).backgroundPositionY) || 0;
-        bg.style.backgroundPositionY = currentPos + 1 + "px";
+    <!-- Modal Winner -->
+    <div id="winnerModal" class="modal">
+      <div class="modal-content">
+        <h2>Winner!</h2>
+        <p>Congratulations! Your Score: <span id="winnerScore"></span></p>
+        <button id="playAgain">Play Again</button>
+      </div>
+    </div>
 
-        let score = parseInt(document.getElementById("score").innerHTML) + 1;
-        document.getElementById("score").innerHTML = score;
+    <script type="text/javascript">
+      var isMoving = true;
+      var isRunning = true;
+      var level = 1;
+      var meteorSpeed = 2;
 
-        if (score % 1000 === 0) {
-          addMeteor();
-          meteorSpeed *= 1; //increase speed by 20%
-        }
+      function setBackgroundMoving() {
+        if (isMoving) {
+          const bg = document.getElementById("main");
 
-        if(score % 200 === 0 ) {
-          meteorSpeed *= 0.5;
-        }
+          const currentPos =
+            parseInt(getComputedStyle(bg).backgroundPositionY) || 0;
 
-        if (isRunning) {
-          requestAnimationFrame(setBackgroundMoving);
+          let score = parseInt(document.getElementById("score").innerHTML) + 1;
+          document.getElementById("score").innerHTML = score;
+
+          if (score >= 1000 * level) {
+            level++;
+            meteorSpeed = meteorSpeed + 1;
+          }
+
+          // console.log(`level: ${level}`);
+          // console.log(`speed meteor: ${meteorSpeed}`)
+
+          document.getElementById("level").innerHTML = level;
+
+          if (level > 3) {
+            showWinnerModal();
+            isMoving = false;
+            return;
+          }
+
+          bg.style.backgroundPositionY = currentPos + 1 + "px";
+
+          if (isRunning) {
+            requestAnimationFrame(setBackgroundMoving);
+          }
         }
       }
-    }
 
-    function addMeteor() {
-      const area = document.getElementById("area");
-      const newMeteor = document.createElement("div");
-      newMeteor.className = "meteor"; // Add a class for styling/identification
-      newMeteor.style.marginTop = "-100px";
-      newMeteor.style.marginLeft = Math.floor(Math.random() * 250) + "px";
-      area.appendChild(newMeteor);
-      meteors.push(newMeteor);
-    }
+      setBackgroundMoving();
 
-    function setMeteorsMoving() {
-      meteors.forEach(meteor => {
-        let top = parseInt(meteor.style.marginTop.replace("px", "")) + 1;
-        meteor.style.marginTop = top + "px";
+      function setMeteorMoving() {
+        var meteor = document.getElementById("meteor"),
+          plane = document.getElementById("plane");
 
-        if (top > 500) {
-          meteor.style.marginLeft = Math.floor(Math.random() * 250) + "px";
-          meteor.style.marginTop = "-100px";
+        setTimeout(function () {
+          meteor.style.marginTop =
+            parseInt(meteor.style.marginTop.replace("px", "")) + 1 + "px";
+          if (parseInt(meteor.style.marginTop.replace("px", "")) > 500) {
+            meteor.style.marginLeft = Math.floor(Math.random() * 250) + "px";
+            meteor.style.marginTop = "-100px";
+          }
+
+          if (
+            meteor.offsetTop + 56 >= plane.offsetTop &&
+            meteor.offsetLeft + 50 >= plane.offsetLeft &&
+            meteor.offsetTop + 56 <= plane.offsetTop + 100 &&
+            meteor.offsetLeft <= plane.offsetLeft + 50
+          ) {
+            showGameOverModal();
+            isMoving = false;
+            plane.setAttribute("class", "freeze");
+            meteor.setAttribute("class", "freeze");
+          } else {
+            setMeteorMoving();
+          }
+        }, meteorSpeed);
+      }
+
+      setMeteorMoving();
+
+      window.addEventListener("keydown", function (e) {
+        var plane = document.getElementById("plane");
+
+        if (!plane) {
+          console.error('Element with ID "plane" not found!');
+          return;
         }
 
-        let plane = document.getElementById("plane");
+        var left = parseInt(plane.style.marginLeft.replace("px", "")) || 0;
+        var top = parseInt(plane.style.marginTop.replace("px", "")) || 0;
 
-        if (
-          meteor.offsetTop + 56 >= plane.offsetTop &&
-          meteor.offsetLeft + 50 >= plane.offsetLeft &&
-          meteor.offsetTop + 56 <= plane.offsetTop + 100 &&
-          meteor.offsetLeft <= plane.offsetLeft + 50
-        ) {
-          gameOver();
-
+        if (isMoving) {
+          if (e.keyCode == 65 || e.code == "ArrowLeft") {
+            if (left > 0) {
+              plane.style.marginLeft = left - 10 + "px";
+            }
+          } else if (e.keyCode == 87 || e.code == "ArrowUp") {
+            if (top > 0) {
+              plane.style.marginTop = top - 10 + "px";
+            }
+          } else if (e.keyCode == 68 || e.code == "ArrowRight") {
+            if (left < 340) {
+              plane.style.marginLeft = left + 10 + "px";
+            }
+          } else if (e.keyCode == 83 || e.code == "ArrowDown") {
+            if (top < 400) {
+              plane.style.marginTop = top + 10 + "px";
+            }
+          }
         }
-
       });
-      // Use setTimeout for dynamic speed
-      setTimeout(setMeteorsMoving, meteorSpeed);
 
-    }
+      function showGameOverModal() {
+        const modal = document.getElementById("gameOverModal");
+        const finalScore = document.getElementById("finalScore");
+        finalScore.textContent = document.getElementById("score").innerHTML;
+        modal.style.display = "block";
 
-    function gameOver() {
-      if (confirm("game over, score : " + document.getElementById("score").innerHTML)) {
-        window.location.reload();
-      } else {
-        window.location.href = "../";
+        document.getElementById("retry").onclick = function () {
+          window.location.reload();
+        };
+
+        document.getElementById("exit").onclick = function () {
+          window.location.href = "../";
+        };
       }
 
-      isMoving = false;
-      plane.setAttribute("class", "freeze");
-      meteors.forEach(meteor => meteor.setAttribute("class", "freeze")); //freeze all meteors
-    }
+      function showWinnerModal() {
+        const modal = document.getElementById("winnerModal");
+        const winnerScore = document.getElementById("winnerScore");
+        winnerScore.textContent = document.getElementById("score").innerHTML;
+        modal.style.display = "block";
 
-
-
-
-    setBackgroundMoving();
-    addMeteor();// Initial meteor
-    setMeteorsMoving();
-
-
-
-    window.addEventListener("keydown", function (e) {
-      var plane = document.getElementById("plane");
-
-      if (!plane) {
-        console.error('Element with ID "plane" not found!');
-        return;
+        document.getElementById("playAgain").onclick = function () {
+          window.location.reload();
+        };
       }
-
-      var left = parseInt(plane.style.marginLeft.replace("px", "")) || 0;
-      var top = parseInt(plane.style.marginTop.replace("px", "")) || 0;
-
-
-      if (isMoving == true) {
-        if (e.keyCode == 65 || e.code == "ArrowLeft") {
-          if (left > 0) {
-            plane.style.marginLeft = left - 10 + "px";
-          }
-        } else if (e.keyCode == 87 || e.code == "ArrowUp") {
-          if (top > 0) {
-            plane.style.marginTop = top - 10 + "px";
-          }
-        } else if (e.keyCode == 68 || e.code == "ArrowRight") {
-          if (left < 340) {
-            plane.style.marginLeft = left + 10 + "px";
-          }
-        } else if (e.keyCode == 83 || e.code == "ArrowDown") {
-          if (top < 400) {
-            plane.style.marginTop = top + 10 + "px";
-          }
-        }
-      }
-    });
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
