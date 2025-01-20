@@ -142,7 +142,7 @@
 
       function showGameOverModal() {
         localStorage.setItem('highScore-space', score)
-        document.getElementById('highScore').innerText = highScore;
+        document.getElementById('highScore').innerText = localStorage.getItem('highScore-space');
         
         const modal = document.getElementById("gameOverModal");
         const finalScore = document.getElementById("finalScore");

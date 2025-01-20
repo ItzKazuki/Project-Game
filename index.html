@@ -107,6 +107,45 @@
     .modal {
       pointer-events: auto;
     }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -117,7 +156,7 @@
   <div class="background-container">
     <div class="title">
       <img src="assets/welcome-text.png" alt="">
-      <h1 id="player">Player!</h1>
+      <h1 id="player" class="tooltip">Player! <span class="tooltiptext">Click to change</span></h1>
     </div>
     <div class="games">
       <a href="spacegame/">
@@ -129,10 +168,10 @@
     </div>
     <div class="games">
       <a href="snake-game/">
-        <img src="assets/example-1.png" alt="">
+        <img src="assets/example-3.png" alt="">
       </a>
       <a href="TicTacToe/">
-        <img src="assets/example-2.png" alt="">
+        <img src="assets/example-4.png" alt="">
       </a>
     </div>
     <!-- <img src="./assets/cloud.png" alt=""> -->
