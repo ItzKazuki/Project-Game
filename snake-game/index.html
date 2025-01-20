@@ -36,22 +36,23 @@
 <body>
 
     <canvas id="snakeCanvas" width="400" height="400"></canvas>
+
     <div id="score-container">
         <div id="score">Score: <span>0</span></div>
         <div id="high-score">High Score: <span>0</span></div>
     </div>
 
-    <div id="example-modal" class="modal">
+    <div id="example-modal" class="modal" style="z-index: 100;">
         <div class="modal-header">Game Over</div>
         <div class="modal-body">
-          <h1>Want try again?</h1>
+            <h1>Want try again?</h1>
         </div>
         <div class="modal-footer" style="display: flex; justify-content: space-between;">
-          <button class="button button-primary"
-            onclick="document.getElementById('example-modal').classList.remove('modal-open');">Yes</button>
-          <button class="button button-secondary" onclick="location.href='../index.html';">No</button>
+            <button class="button button-primary"
+                onclick="document.getElementById('example-modal').classList.remove('modal-open');">Yes</button>
+            <button class="button button-secondary" onclick="location.href='../index.html';">No</button>
         </div>
-      </div>
+    </div>
 
     <script>
         const canvas = document.getElementById('snakeCanvas');
@@ -62,7 +63,7 @@
         let direction = 'right';
         let food = getRandomFood();
         let score = 0;
-        let highScore = 0;
+        let highScore = localStorage.getItem('highScore-snake') || '0';
         let speed = 200;
         let initialSpeed = speed;
 
@@ -132,7 +133,7 @@
             scoreElement.innerText = score;
 
             if (score > highScore) {
-                highScore = score;
+                // highScore = score;
                 const highScoreElement = document.querySelector('#high-score span');
                 highScoreElement.innerText = highScore;
             }
@@ -159,6 +160,7 @@
             direction = 'right';
             food = getRandomFood();
             score = 0;
+            localStorage.setItem('highScore-snake', score);
             speed = initialSpeed;
             updateScore();
         }

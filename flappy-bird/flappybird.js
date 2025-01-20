@@ -41,7 +41,7 @@ let topScoreElement;
 
 let gameOver = false;
 let score = 0;
-let highScore = 0;
+let highScore = localStorage.getItem('highScore-flappy-bird') || '0';
 
 function levelAnjay() {
   if (score == 0) {
@@ -173,7 +173,11 @@ function update() {
 
   if (gameOver) {
     // context.fillText("GAME OVER", 5, 90);
-    highScore = score > highScore ? score : highScore;
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('highScore-flappy-bird', highScore);
+    }
+    highScore = localStorage.getItem('highScore-flappy-bird');
     document.getElementById("example-modal").classList.add("modal-open");
   }
 }
