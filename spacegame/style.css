@@ -71,7 +71,7 @@ button {
   }
 }
 
-#meteor {
+.meteor {
   width: 60px;
   height: 60px;
   background: url("img/meteor1.png");
@@ -79,7 +79,7 @@ button {
   animation: meteor 0.7s infinite;
 }
 
-#meteor .freeze {
+.meteor .freeze {
   width: 60px;
   height: 60px;
   background: url("img/meteor1.png");
