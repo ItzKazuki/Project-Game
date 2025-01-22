@@ -54,7 +54,7 @@
       meteor.id = 'meteor' + meteors.length; // Give each meteor a unique ID
       meteor.className = 'meteor'; // Add a class for styling
       meteor.style.marginTop = '-100px';
-      meteor.style.marginLeft = Math.floor(Math.random() * 340) + 'px'; // Random horizontal position
+      meteor.style.marginLeft = Math.floor(Math.random() * 400) + 'px'; // Random horizontal position
       document.getElementById('area').appendChild(meteor);
       meteors.push(meteor);
     }
@@ -76,7 +76,7 @@
 
         if (score >= 1000 * level) {
           level++;
-          meteorSpeed = meteorSpeed + 1;
+          meteorSpeed = meteorSpeed + 0.5;
           // Add a new meteor every time the level increases
           createMeteor();
         }
@@ -98,7 +98,6 @@
 
       }
     }
-
 
     function setMeteorMoving() {
       setTimeout(function () {
@@ -125,8 +124,6 @@
 
           }
         });
-
-
 
         if (isMoving) { // Only call recursively if game is not over
           setMeteorMoving();
