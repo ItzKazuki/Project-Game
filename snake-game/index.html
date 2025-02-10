@@ -64,7 +64,7 @@
         let food = getRandomFood();
         let score = 0;
         let highScore = localStorage.getItem('highScore-snake') || '0';
-        let speed = 200;
+        let speed = 150;
         let initialSpeed = speed;
 
         function drawSnake() {
@@ -125,7 +125,7 @@
         }
 
         function increaseSpeed() {
-            speed = Math.max(10, initialSpeed - Math.floor(score / 1) * 5);
+            speed = Math.max(15, initialSpeed - Math.floor(score / 1) * 5);
         }
 
         function updateScore() {
